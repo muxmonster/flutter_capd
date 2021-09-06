@@ -272,8 +272,8 @@ class _HomePageState extends State<HomePage> {
                           Container(
                             child: IconButton(
                               onPressed: () {},
-                              icon:
-                                  Image.asset('assets/images/record_dialy.png'),
+                              icon: Icon(Icons.inbox, color: Colors.blue),
+                              //Image.asset('assets/images/record_dialy.png'),
                               iconSize: 80.0,
                             ),
                           ),
@@ -283,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           const Text(
-                            'บันทึกรับน้ำยาล้างไต',
+                            'รับน้ำยาล้างไต',
                             style: TextStyle(
                               fontFamily: 'FC-Lamoon',
                               fontSize: 16.0,
@@ -313,8 +313,11 @@ class _HomePageState extends State<HomePage> {
                           Container(
                             child: IconButton(
                               onPressed: () {},
-                              icon:
-                                  Image.asset('assets/images/record_dialy.png'),
+                              icon: Icon(
+                                Icons.outbox,
+                                color: Colors.pink,
+                              ),
+                              //Image.asset('assets/images/record_dialy.png'),
                               iconSize: 80.0,
                             ),
                           ),
@@ -324,7 +327,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           const Text(
-                            'บันทึกจ่ายน้ำยาล้างไต',
+                            'จ่ายน้ำยาล้างไต',
                             style: TextStyle(
                               fontFamily: 'FC-Lamoon',
                               fontSize: 16.0,
