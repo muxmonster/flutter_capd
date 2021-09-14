@@ -10,7 +10,7 @@ class MyConfigs {
   static Color darker = Color(0xff0088a3);
   static Color light = Color(0xffb9b64e);
 
-  TextStyle h3() => TextStyle(
+  TextStyle labelText() => TextStyle(
       fontSize: 14.0,
       fontFamily: 'FC-Lamoon',
       color: dark,

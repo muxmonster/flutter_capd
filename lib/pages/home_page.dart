@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_login_app/my_constant.dart';
+import 'package:simple_login_app/pages/member_main_page.dart';
 import 'package:simple_login_app/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -169,183 +170,184 @@ class _HomePageState extends State<HomePage> {
       //   ),
       // )
 
-      body: Card(
-        child: GridView.count(
-          padding: const EdgeInsets.all(10.0),
-          mainAxisSpacing: 2,
-          crossAxisSpacing: 2,
-          crossAxisCount: 2,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(5.0),
-              child: Card(
-                child: Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: IconButton(
-                              onPressed: () {},
-                              icon:
-                                  Image.asset('assets/images/appointment.png'),
-                              iconSize: 80.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const Text(
-                            'ข้อมูลการนัดหมาย',
-                            style: TextStyle(
-                              fontFamily: 'FC-Lamoon',
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              color: MyConfigs.darker,
-            ),
-            Container(
-              padding: const EdgeInsets.all(5.0),
-              child: Card(
-                child: Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: IconButton(
-                              onPressed: () {},
-                              icon:
-                                  Image.asset('assets/images/record_dialy.png'),
-                              iconSize: 80.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const Text(
-                            'บันทึกข้อมูลรายวัน',
-                            style: TextStyle(
-                              fontFamily: 'FC-Lamoon',
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              color: MyConfigs.darker,
-            ),
-            Container(
-              padding: const EdgeInsets.all(5.0),
-              child: Card(
-                child: Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.inbox, color: Colors.blue),
-                              //Image.asset('assets/images/record_dialy.png'),
-                              iconSize: 80.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const Text(
-                            'รับน้ำยาล้างไต',
-                            style: TextStyle(
-                              fontFamily: 'FC-Lamoon',
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              color: MyConfigs.darker,
-            ),
-            Container(
-              padding: const EdgeInsets.all(5.0),
-              child: Card(
-                child: Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.outbox,
-                                color: Colors.pink,
-                              ),
-                              //Image.asset('assets/images/record_dialy.png'),
-                              iconSize: 80.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const Text(
-                            'จ่ายน้ำยาล้างไต',
-                            style: TextStyle(
-                              fontFamily: 'FC-Lamoon',
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              color: MyConfigs.darker,
-            ),
-          ],
-        ),
-      ),
+      body: MemberMainPage(),
+      // body: Card(
+      //   child: GridView.count(
+      //     padding: const EdgeInsets.all(10.0),
+      //     mainAxisSpacing: 2,
+      //     crossAxisSpacing: 2,
+      //     crossAxisCount: 2,
+      //     children: [
+      //       Container(
+      //         padding: const EdgeInsets.all(5.0),
+      //         child: Card(
+      //           child: Container(
+      //             color: Colors.white,
+      //             padding: EdgeInsets.all(8.0),
+      //             child: Column(
+      //               children: [
+      //                 Column(
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   children: [
+      //                     Container(
+      //                       child: IconButton(
+      //                         onPressed: () {},
+      //                         icon:
+      //                             Image.asset('assets/images/appointment.png'),
+      //                         iconSize: 80.0,
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //                 Column(
+      //                   crossAxisAlignment: CrossAxisAlignment.end,
+      //                   children: [
+      //                     const Text(
+      //                       'ข้อมูลการนัดหมาย',
+      //                       style: TextStyle(
+      //                         fontFamily: 'FC-Lamoon',
+      //                         fontSize: 16.0,
+      //                         fontWeight: FontWeight.bold,
+      //                         letterSpacing: 0.5,
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //         color: MyConfigs.darker,
+      //       ),
+      //       Container(
+      //         padding: const EdgeInsets.all(5.0),
+      //         child: Card(
+      //           child: Container(
+      //             color: Colors.white,
+      //             padding: EdgeInsets.all(8.0),
+      //             child: Column(
+      //               children: [
+      //                 Column(
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   children: [
+      //                     Container(
+      //                       child: IconButton(
+      //                         onPressed: () {},
+      //                         icon:
+      //                             Image.asset('assets/images/record_dialy.png'),
+      //                         iconSize: 80.0,
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //                 Column(
+      //                   crossAxisAlignment: CrossAxisAlignment.end,
+      //                   children: [
+      //                     const Text(
+      //                       'บันทึกข้อมูลรายวัน',
+      //                       style: TextStyle(
+      //                         fontFamily: 'FC-Lamoon',
+      //                         fontSize: 16.0,
+      //                         fontWeight: FontWeight.bold,
+      //                         letterSpacing: 0.5,
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //         color: MyConfigs.darker,
+      //       ),
+      //       Container(
+      //         padding: const EdgeInsets.all(5.0),
+      //         child: Card(
+      //           child: Container(
+      //             color: Colors.white,
+      //             padding: EdgeInsets.all(8.0),
+      //             child: Column(
+      //               children: [
+      //                 Column(
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   children: [
+      //                     Container(
+      //                       child: IconButton(
+      //                         onPressed: () {},
+      //                         icon: Icon(Icons.inbox, color: Colors.blue),
+      //                         //Image.asset('assets/images/record_dialy.png'),
+      //                         iconSize: 80.0,
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //                 Column(
+      //                   crossAxisAlignment: CrossAxisAlignment.end,
+      //                   children: [
+      //                     const Text(
+      //                       'รับน้ำยาล้างไต',
+      //                       style: TextStyle(
+      //                         fontFamily: 'FC-Lamoon',
+      //                         fontSize: 16.0,
+      //                         fontWeight: FontWeight.bold,
+      //                         letterSpacing: 0.5,
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //         color: MyConfigs.darker,
+      //       ),
+      //       Container(
+      //         padding: const EdgeInsets.all(5.0),
+      //         child: Card(
+      //           child: Container(
+      //             color: Colors.white,
+      //             padding: EdgeInsets.all(8.0),
+      //             child: Column(
+      //               children: [
+      //                 Column(
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   children: [
+      //                     Container(
+      //                       child: IconButton(
+      //                         onPressed: () {},
+      //                         icon: Icon(
+      //                           Icons.outbox,
+      //                           color: Colors.pink,
+      //                         ),
+      //                         //Image.asset('assets/images/record_dialy.png'),
+      //                         iconSize: 80.0,
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //                 Column(
+      //                   crossAxisAlignment: CrossAxisAlignment.end,
+      //                   children: [
+      //                     const Text(
+      //                       'จ่ายน้ำยาล้างไต',
+      //                       style: TextStyle(
+      //                         fontFamily: 'FC-Lamoon',
+      //                         fontSize: 16.0,
+      //                         fontWeight: FontWeight.bold,
+      //                         letterSpacing: 0.5,
+      //                       ),
+      //                     ),
+      //                   ],
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //         color: MyConfigs.darker,
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }
