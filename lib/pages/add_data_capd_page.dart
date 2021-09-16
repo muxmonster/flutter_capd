@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:intl/intl.dart';
@@ -12,7 +13,6 @@ import 'package:simple_login_app/models/kind_fluid_color.dart';
 import 'package:simple_login_app/my_constant.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'dart:convert';
 
 class AddDataCapdPage extends StatefulWidget {
   const AddDataCapdPage({Key? key}) : super(key: key);
@@ -54,9 +54,12 @@ class _AddDataCapdPageState extends State<AddDataCapdPage> {
   final listTypeFluid = ['1.5', '2.0', '2.5', '3.0', '3.5', '4.0'];
   // final listKindFluidColor = ['แดงจาง + ใส', 'เหลือง + ใส'];
 
+  final fromKey = GlobalKey<FormState>();
+
   /// เตรียมข้อมูลก่อนบันทึก
   Future<Null> prepareData() async {
-    print(kindFluidColor);
+    print(
+        '''##### ${ctrlVstdate.text}, ${numof.toString()}, ${typeFluid.toString()}, ${ctrlTimeInFluidBegin.text}, ${ctrlTimeInFluidEnd.text}, ${ctrlInFluidValue.text}, ${ctrlTimeOutFluidBegin.text}, ${ctrlTimeOutFluidEnd.text}, ${ctrlOutFluidValue.text}, ${ctrlSumFluidValue.text}, ${kindFluidColor.toString()} ''');
   }
 
   /// ดึงข้อมูลมาจาก ฐานข้อมูล ตาราง kind_fluid_color
@@ -249,6 +252,14 @@ class _AddDataCapdPageState extends State<AddDataCapdPage> {
   /// วันที่บันทึกข้อมูล
   Future<Null> pickRoundVstdate(BuildContext context) async {
     DateTime? _vstdate = await showRoundedDatePicker(
+        styleDatePicker: MaterialRoundedDatePickerStyle(
+          textStyleDayHeader:
+              TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
+          decorationDateSelected: BoxDecoration(
+            color: Colors.indigo,
+            shape: BoxShape.circle,
+          ),
+        ),
         textPositiveButton: 'ตกลง',
         textNegativeButton: 'ยกเลิก',
         context: context,
@@ -258,7 +269,7 @@ class _AddDataCapdPageState extends State<AddDataCapdPage> {
     if (_vstdate == null) return;
     setState(() {
       vstdate = _vstdate;
-      print(vstdate);
+      //print(vstdate);
       ctrlVstdate.text = DateFormat('yyyy-MM-dd').format(vstdate!);
     });
   }
@@ -268,6 +279,11 @@ class _AddDataCapdPageState extends State<AddDataCapdPage> {
   void initState() {
     super.initState();
     loadKindFluidColor();
+    ctrlVstdate.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    ctrlTimeInFluidBegin.text = DateFormat('HH:mm').format(DateTime.now());
+    ctrlTimeInFluidEnd.text = DateFormat('HH:mm').format(DateTime.now());
+    ctrlTimeOutFluidBegin.text = DateFormat('HH:mm').format(DateTime.now());
+    ctrlTimeOutFluidEnd.text = DateFormat('HH:mm').format(DateTime.now());
   }
 
   @override
@@ -289,7 +305,7 @@ class _AddDataCapdPageState extends State<AddDataCapdPage> {
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => FocusScope.of(context).requestFocus(
-          FocusNode(),
+          FocusScopeNode(),
         ),
         child: isLoading
             ? Center(child: CircularProgressIndicator())
@@ -297,63 +313,82 @@ class _AddDataCapdPageState extends State<AddDataCapdPage> {
                 onRefresh: loadKindFluidColor,
                 child: ListView(
                   children: [
-                    Stack(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          child: Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  leading: Icon(
-                                    Icons.group_add,
-                                    size: 50.0,
-                                    color: Colors.black54,
-                                  ),
-                                  title: const Text(
-                                    'บันทึกข้อมูล CAPD',
-                                    style: TextStyle(
-                                        fontFamily: 'FC-Lamoon',
-                                        fontSize: 24.0),
-                                  ),
-                                  subtitle: Text(
-                                    'ระบบบันทึกข้อมูล Capd ตามรอบวัน',
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(0.6),
-                                        fontFamily: 'FC-Lamoon'),
-                                  ),
-                                ),
-                                Divider(),
-                                Column(
-                                  children: [
-                                    /// วันที่บันทึกข้อมูล
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        onTap: () => pickRoundVstdate(context),
-                                        controller: ctrlVstdate,
-                                        readOnly: true,
-                                        decoration: const InputDecoration(
-                                            suffixIcon: Icon(Icons.date_range),
-                                            border: OutlineInputBorder(),
-                                            labelText: 'วันที่บันทึกข้อมูล',
-                                            labelStyle: TextStyle(
-                                                fontFamily: 'FC-Lamoon')),
-                                      ),
+                    Form(
+                      key: fromKey,
+                      child: Stack(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10.0),
+                            child: Card(
+                              clipBehavior: Clip.antiAlias,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: Icon(
+                                      Icons.group_add,
+                                      size: 50.0,
+                                      color: Colors.black54,
                                     ),
+                                    title: const Text(
+                                      'บันทึกข้อมูล CAPD',
+                                      style: TextStyle(
+                                          fontFamily: 'FC-Lamoon',
+                                          fontSize: 24.0),
+                                    ),
+                                    subtitle: Text(
+                                      'ระบบบันทึกข้อมูล Capd ตามรอบวัน',
+                                      style: TextStyle(
+                                          color: Colors.black.withOpacity(0.6),
+                                          fontFamily: 'FC-Lamoon'),
+                                    ),
+                                  ),
+                                  Divider(),
+                                  Column(
+                                    children: [
+                                      /// วันที่บันทึกข้อมูล
+                                      Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'วันที่บันทึกข้อมูลเป็นค่าว่าง';
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          onTap: () =>
+                                              pickRoundVstdate(context),
+                                          controller: ctrlVstdate,
+                                          readOnly: true,
+                                          decoration: const InputDecoration(
+                                              suffixIcon:
+                                                  Icon(Icons.date_range),
+                                              border: OutlineInputBorder(),
+                                              labelText: 'วันที่บันทึกข้อมูล',
+                                              labelStyle: TextStyle(
+                                                  fontFamily: 'FC-Lamoon')),
+                                        ),
+                                      ),
 
-                                    /// ครั้งที่/รอบที่ (1,2,3, ...5)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButtonFormField<String>(
+                                      /// ครั้งที่/รอบที่ (1,2,3, ...5)
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropdownButtonHideUnderline(
+                                          child:
+                                              DropdownButtonFormField<String>(
                                             decoration: const InputDecoration(
                                                 labelText: 'ครั้งที่/รอบที่',
                                                 labelStyle: TextStyle(
                                                     fontFamily: 'FC-Lamoon'),
                                                 border: OutlineInputBorder()),
                                             value: numof,
+                                            validator: (value) {
+                                              if (value == null) {
+                                                return 'กรุณาเลือกรอบที่ทำการเปลี่ยนน้ำยา';
+                                              } else {
+                                                return null;
+                                              }
+                                            },
                                             icon: const Icon(
                                                 Icons.arrow_drop_down_circle,
                                                 color: Colors.black45),
@@ -361,276 +396,293 @@ class _AddDataCapdPageState extends State<AddDataCapdPage> {
                                             items: listNumOf
                                                 .map(buildMenuItemNumOf)
                                                 .toList(),
-                                            onChanged: (_numof) =>
-                                                setState(() => numof = _numof)),
-                                      ),
-                                    ),
-
-                                    /// ชนิดของน้ำยา (1.5, 2.0, 2.5, ...4)
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButtonFormField<String>(
-                                            decoration: const InputDecoration(
-                                                labelText: 'ชนิดของน้ำยา',
-                                                labelStyle: TextStyle(
-                                                    fontFamily: 'FC-Lamoon'),
-                                                border: OutlineInputBorder()),
-                                            value: typeFluid,
-                                            icon: const Icon(
-                                                Icons.arrow_drop_down_circle,
-                                                color: Colors.black45),
-                                            isExpanded: true,
-                                            items: listTypeFluid
-                                                .map(buildMenuTypeFluid)
-                                                .toList(),
-                                            onChanged: (fluid) => setState(
-                                                () => typeFluid = fluid)),
-                                      ),
-                                    ),
-
-                                    /// เวลาเริ่มปล่อยน้ำยาเข้าท้อง
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        onTap: () =>
-                                            pickTimeInFluidBegin(context),
-                                        controller: ctrlTimeInFluidBegin,
-                                        readOnly: true,
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText:
-                                              'เวลาเริ่มปล่อย(น้ำยาเข้า)',
-                                          labelStyle: TextStyle(
-                                              fontFamily: 'FC-Lamoon'),
-                                          suffixIcon: Icon(Icons.timer),
-                                        ),
-                                      ),
-                                    ),
-
-                                    /// เวลาสิ้นสุดนำน้ำยาเข้าท้อง
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        onTap: () =>
-                                            pickTimeInFluidEnd(context),
-                                        controller: ctrlTimeInFluidEnd,
-                                        readOnly: true,
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'เวลาสิ้นสุด(น้ำยาเข้า)',
-                                          labelStyle: TextStyle(
-                                              fontFamily: 'FC-Lamoon'),
-                                          suffixIcon: Icon(Icons.timer),
-                                        ),
-                                      ),
-                                    ),
-
-                                    /// ปริมาตรน้ำยาเข้า
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        //textInputAction: TextInputAction.next,
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.digitsOnly
-                                        ],
-                                        onTap: () {},
-                                        controller: ctrlInFluidValue,
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'ปริมาตรน้ำยาเข้า',
-                                          labelStyle: TextStyle(
-                                              fontFamily: 'FC-Lamoon'),
-                                          suffixIcon: Icon(Icons.move_to_inbox),
-                                        ),
-                                      ),
-                                    ),
-
-                                    /// เวลาเริ่มปล่อยน้ำยาออกท้อง
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        onTap: () =>
-                                            pickTimeOutFluidBegin(context),
-                                        controller: ctrlTimeOutFluidBegin,
-                                        readOnly: true,
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'เวลาเริ่มปล่อย(น้ำยาออก)',
-                                          labelStyle: TextStyle(
-                                              fontFamily: 'FC-Lamoon'),
-                                          suffixIcon: Icon(Icons.timer),
-                                        ),
-                                      ),
-                                    ),
-
-                                    /// เวลาสิ้นสุดการปล่อยน้ำยาออกท้อง
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        onTap: () =>
-                                            pickTimeOutFluidEnd(context),
-                                        controller: ctrlTimeOutFluidEnd,
-                                        readOnly: true,
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText:
-                                              'เวลาสิ้นสุดการปล่อย(น้ำยาออก)',
-                                          labelStyle: TextStyle(
-                                              fontFamily: 'FC-Lamoon'),
-                                          suffixIcon: Icon(Icons.timer),
-                                        ),
-                                      ),
-                                    ),
-
-                                    /// ปริมาตรน้ำยาออก
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.digitsOnly
-                                        ],
-                                        //textInputAction: TextInputAction.next,
-                                        onTap: () {},
-                                        controller: ctrlOutFluidValue,
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'ปริมาตรน้ำยาออก',
-                                          labelStyle: TextStyle(
-                                              fontFamily: 'FC-Lamoon'),
-                                          suffixIcon: Icon(
-                                            Icons.outbox,
+                                            onChanged: (_numof) => setState(() {
+                                              numof = _numof;
+                                            }),
                                           ),
                                         ),
                                       ),
-                                    ),
 
-                                    /// กำไร / ขาดทุน
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        style: TextStyle(color: Colors.indigo),
-                                        readOnly: true,
-                                        keyboardType: TextInputType.number,
-                                        // textInputAction: TextInputAction.next,
-                                        onTap: () {},
-                                        controller: ctrlSumFluidValue,
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          labelText:
-                                              'กำไร/ขาดทุน(น้ำยาออก - น้ำยาเข้า)',
-                                          labelStyle: TextStyle(
-                                              fontFamily: 'FC-Lamoon',
-                                              color: Colors.indigo),
-                                          filled: true,
-                                          fillColor: isLoss
-                                              ? Colors.green
-                                              : Colors.pink,
-                                          suffixIcon: IconButton(
-                                              onPressed: () {
-                                                int volumeFluidIn = int.parse(
-                                                    (ctrlInFluidValue.text ==
-                                                            '')
-                                                        ? '0'
-                                                        : ctrlInFluidValue
-                                                            .text);
-                                                int volumeFluidOut = int.parse(
-                                                    (ctrlOutFluidValue.text ==
-                                                            '')
-                                                        ? '0'
-                                                        : ctrlOutFluidValue
-                                                            .text);
-                                                calculateVolume(volumeFluidIn,
-                                                    volumeFluidOut);
-                                              },
-                                              icon: Icon(Icons.calculate,
-                                                  size: 32.0,
-                                                  color: Colors.indigo)),
+                                      /// ชนิดของน้ำยา (1.5, 2.0, 2.5, ...4)
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButtonFormField<
+                                                  String>(
+                                              decoration: const InputDecoration(
+                                                  labelText: 'ชนิดของน้ำยา',
+                                                  labelStyle: TextStyle(
+                                                      fontFamily: 'FC-Lamoon'),
+                                                  border: OutlineInputBorder()),
+                                              value: typeFluid,
+                                              icon: const Icon(
+                                                  Icons.arrow_drop_down_circle,
+                                                  color: Colors.black45),
+                                              isExpanded: true,
+                                              items: listTypeFluid
+                                                  .map(buildMenuTypeFluid)
+                                                  .toList(),
+                                              onChanged: (fluid) => setState(
+                                                  () => typeFluid = fluid)),
                                         ),
                                       ),
-                                    ),
 
-                                    /// ลักษณะของสีน้ำยา
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButtonFormField<String>(
-                                            decoration: const InputDecoration(
-                                                labelText: 'ลักษณะสีของน้ำยา',
-                                                labelStyle: TextStyle(
-                                                    fontFamily: 'FC-Lamoon'),
-                                                border: OutlineInputBorder()),
-                                            value: kindFluidColor,
-                                            icon: const Icon(
-                                                Icons.arrow_drop_down_circle,
-                                                color: Colors.black45),
-                                            isExpanded: true,
-                                            items: listKindFluidColor
-                                                .map(buildMenuKindFluidColor)
-                                                .toList(),
-                                            onTap: () => loadKindFluidColor(),
-                                            onChanged: (fluid) => setState(
-                                                () => kindFluidColor = fluid)),
+                                      /// เวลาเริ่มปล่อยน้ำยาเข้าท้อง
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          onTap: () =>
+                                              pickTimeInFluidBegin(context),
+                                          controller: ctrlTimeInFluidBegin,
+                                          readOnly: true,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText:
+                                                'เวลาเริ่มปล่อย(น้ำยาเข้า)',
+                                            labelStyle: TextStyle(
+                                                fontFamily: 'FC-Lamoon'),
+                                            suffixIcon: Icon(Icons.timer),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const Divider(),
 
-                                /// ปุ่มบันทึกข้อมูล
-                                ButtonBar(
-                                  alignment: MainAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () => prepareData(),
-                                      child: const Text(
-                                        'บันทึกข้อมูล',
-                                        style: TextStyle(
-                                          fontFamily: 'FC-Lamoon',
-                                          fontSize: 18.0,
-                                          letterSpacing: 0.8,
+                                      /// เวลาสิ้นสุดนำน้ำยาเข้าท้อง
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          onTap: () =>
+                                              pickTimeInFluidEnd(context),
+                                          controller: ctrlTimeInFluidEnd,
+                                          readOnly: true,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'เวลาสิ้นสุด(น้ำยาเข้า)',
+                                            labelStyle: TextStyle(
+                                                fontFamily: 'FC-Lamoon'),
+                                            suffixIcon: Icon(Icons.timer),
+                                          ),
                                         ),
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                        primary: MyConfigs.darker,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50.0),
+
+                                      /// ปริมาตรน้ำยาเข้า
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          //textInputAction: TextInputAction.next,
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
+                                          onTap: () {},
+                                          controller: ctrlInFluidValue,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'ปริมาตรน้ำยาเข้า',
+                                            labelStyle: TextStyle(
+                                                fontFamily: 'FC-Lamoon'),
+                                            suffixIcon:
+                                                Icon(Icons.move_to_inbox),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    ElevatedButton(
-                                      // textColor: const Color(0xFF6200EE),
-                                      onPressed: () {
-                                        // Perform some action
-                                      },
-                                      child: const Text(
-                                        'ยกเลิก',
-                                        style: TextStyle(
-                                          fontFamily: 'FC-Lamoon',
-                                          fontSize: 18.0,
-                                          color: Colors.red,
-                                          letterSpacing: 0.8,
+
+                                      /// เวลาเริ่มปล่อยน้ำยาออกท้อง
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          onTap: () =>
+                                              pickTimeOutFluidBegin(context),
+                                          controller: ctrlTimeOutFluidBegin,
+                                          readOnly: true,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText:
+                                                'เวลาเริ่มปล่อย(น้ำยาออก)',
+                                            labelStyle: TextStyle(
+                                                fontFamily: 'FC-Lamoon'),
+                                            suffixIcon: Icon(Icons.timer),
+                                          ),
                                         ),
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50.0),
+
+                                      /// เวลาสิ้นสุดการปล่อยน้ำยาออกท้อง
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          onTap: () =>
+                                              pickTimeOutFluidEnd(context),
+                                          controller: ctrlTimeOutFluidEnd,
+                                          readOnly: true,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText:
+                                                'เวลาสิ้นสุดการปล่อย(น้ำยาออก)',
+                                            labelStyle: TextStyle(
+                                                fontFamily: 'FC-Lamoon'),
+                                            suffixIcon: Icon(Icons.timer),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+
+                                      /// ปริมาตรน้ำยาออก
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
+                                          //textInputAction: TextInputAction.next,
+                                          onTap: () {},
+                                          controller: ctrlOutFluidValue,
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'ปริมาตรน้ำยาออก',
+                                            labelStyle: TextStyle(
+                                                fontFamily: 'FC-Lamoon'),
+                                            suffixIcon: Icon(
+                                              Icons.outbox,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      /// กำไร / ขาดทุน
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          style:
+                                              TextStyle(color: Colors.indigo),
+                                          readOnly: true,
+                                          keyboardType: TextInputType.number,
+                                          // textInputAction: TextInputAction.next,
+                                          onTap: () {},
+                                          controller: ctrlSumFluidValue,
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            labelText:
+                                                'กำไร/ขาดทุน(น้ำยาออก - น้ำยาเข้า)',
+                                            labelStyle: TextStyle(
+                                                fontFamily: 'FC-Lamoon',
+                                                color: Colors.indigo),
+                                            filled: true,
+                                            fillColor: isLoss
+                                                ? Colors.green
+                                                : Colors.pink,
+                                            suffixIcon: IconButton(
+                                                onPressed: () {
+                                                  int volumeFluidIn = int.parse(
+                                                      (ctrlInFluidValue.text ==
+                                                              '')
+                                                          ? '0'
+                                                          : ctrlInFluidValue
+                                                              .text);
+                                                  int volumeFluidOut = int
+                                                      .parse((ctrlOutFluidValue
+                                                                  .text ==
+                                                              '')
+                                                          ? '0'
+                                                          : ctrlOutFluidValue
+                                                              .text);
+                                                  calculateVolume(volumeFluidIn,
+                                                      volumeFluidOut);
+                                                },
+                                                icon: Icon(Icons.calculate,
+                                                    size: 32.0,
+                                                    color: Colors.indigo)),
+                                          ),
+                                        ),
+                                      ),
+
+                                      /// ลักษณะของสีน้ำยา
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButtonFormField<
+                                                  String>(
+                                              decoration: const InputDecoration(
+                                                  labelText: 'ลักษณะสีของน้ำยา',
+                                                  labelStyle: TextStyle(
+                                                      fontFamily: 'FC-Lamoon'),
+                                                  border: OutlineInputBorder()),
+                                              value: kindFluidColor,
+                                              icon: const Icon(
+                                                  Icons.arrow_drop_down_circle,
+                                                  color: Colors.black45),
+                                              isExpanded: true,
+                                              items: listKindFluidColor
+                                                  .map(buildMenuKindFluidColor)
+                                                  .toList(),
+                                              onTap: () => loadKindFluidColor(),
+                                              onChanged: (fluid) => setState(
+                                                  () =>
+                                                      kindFluidColor = fluid)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Divider(),
+
+                                  /// ปุ่มบันทึกข้อมูล
+                                  ButtonBar(
+                                    alignment: MainAxisAlignment.center,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          if (fromKey.currentState!
+                                              .validate()) {
+                                            prepareData();
+                                          }
+                                        },
+                                        child: const Text(
+                                          'บันทึกข้อมูล',
+                                          style: TextStyle(
+                                            fontFamily: 'FC-Lamoon',
+                                            fontSize: 18.0,
+                                            letterSpacing: 0.8,
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: MyConfigs.darker,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        // textColor: const Color(0xFF6200EE),
+                                        onPressed: () {
+                                          // Perform some action
+                                        },
+                                        child: const Text(
+                                          'ยกเลิก',
+                                          style: TextStyle(
+                                            fontFamily: 'FC-Lamoon',
+                                            fontSize: 18.0,
+                                            color: Colors.red,
+                                            letterSpacing: 0.8,
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),

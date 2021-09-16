@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Capd',
       theme: ThemeData(
+        fontFamily: 'FC-Lamoon',
         scaffoldBackgroundColor: Colors.white70,
         primaryColor: Colors.cyan,
       ),
