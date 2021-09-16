@@ -58,8 +58,12 @@ class _AddDataCapdPageState extends State<AddDataCapdPage> {
 
   /// เตรียมข้อมูลก่อนบันทึก
   Future<Null> prepareData() async {
-    print(
-        '''##### ${ctrlVstdate.text}, ${numof.toString()}, ${typeFluid.toString()}, ${ctrlTimeInFluidBegin.text}, ${ctrlTimeInFluidEnd.text}, ${ctrlInFluidValue.text}, ${ctrlTimeOutFluidBegin.text}, ${ctrlTimeOutFluidEnd.text}, ${ctrlOutFluidValue.text}, ${ctrlSumFluidValue.text}, ${kindFluidColor.toString()} ''');
+    print('''##### ${ctrlVstdate.text}, ${numof.toString()},
+        ${typeFluid.toString()}, ${ctrlTimeInFluidBegin.text},
+        ${ctrlTimeInFluidEnd.text}, ${ctrlInFluidValue.text},
+        ${ctrlTimeOutFluidBegin.text}, ${ctrlTimeOutFluidEnd.text},
+        ${ctrlOutFluidValue.text}, ${ctrlSumFluidValue.text},
+        ${kindFluidColor.toString()} ''');
   }
 
   /// ดึงข้อมูลมาจาก ฐานข้อมูล ตาราง kind_fluid_color
